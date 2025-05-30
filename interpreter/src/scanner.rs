@@ -81,6 +81,9 @@ impl Default for Scanner {
 
 impl Scanner {
     fn use_char(&mut self, x: char) -> MachineOutput {
+        if x == '\n' {
+            self.char_index = 0;
+        }
         let old_state = std::mem::take(&mut self.state);
         match old_state {
                 ScannerState::Blank => {
