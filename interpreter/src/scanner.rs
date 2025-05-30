@@ -5,6 +5,7 @@ use crate::scanner::TokenType::*;
 pub struct Scanner {
     pub tokens: Vec<TokenType>,
     pub char_index: u64,
+    pub line_no: u64,
     state: ScannerState,
     is_commented: bool,
     keyword_map: HashMap<&'static str, TokenType>
@@ -74,7 +75,8 @@ impl Default for Scanner {
                 ("and", And),
                 ("or", Or),
                 ("nil", Nil),
-            ])
+            ]),
+            line_no: 0
         }
     }
 }
@@ -83,6 +85,7 @@ impl Scanner {
     fn use_char(&mut self, x: char) -> MachineOutput {
         if x == '\n' {
             self.char_index = 0;
+            self.line_no += 1;
         }
         let old_state = std::mem::take(&mut self.state);
         match old_state {

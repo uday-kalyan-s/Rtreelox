@@ -5,13 +5,12 @@ use std::{env};
 use std::fs;
 
 struct Interpreter {
-    line_no: u64,
     scanner: Scanner
 }
 
 impl Default for Interpreter {
     fn default() -> Self {
-        Interpreter { line_no: 0, scanner: Scanner::default() }
+        Interpreter { scanner: Scanner::default() }
     }
 }
 
@@ -31,7 +30,7 @@ impl Interpreter {
     }
     fn run_line(&mut self, line: String) {
         if let Err(error) = self.scanner.scan_line(line.to_string()) {
-            panic!("error found in line: {}, char: {}\n{}", self.line_no, self.scanner.char_index, error);
+            panic!("error found in line: {}, char: {}\n{}", self.scanner.line_no, self.scanner.char_index, error);
         }
     }
     pub fn print_tokens(&self) {
