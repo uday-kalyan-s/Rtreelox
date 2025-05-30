@@ -186,19 +186,16 @@ impl Scanner {
                 },
                 ScannerState::ExpectingNumber(mut num) => {
                     match x {
-                        ' ' | '\n' => {
-                            let parsed = num.parse();
-                            match parsed {
-                                Ok(parsed_num) => MachineOutput::cons_out(TokenType::Number(parsed_num), ScannerState::Blank),
-                                Err(error) => MachineOutput::err(error.to_string())
-                            }
-                        }
                         '0'..'9' | '.' => {
                             num.push(x);
                             MachineOutput::cons_none(ScannerState::ExpectingNumber(num))
-                        }
+                        },
                         _ => {
-                            MachineOutput::err("number ends with space".to_string())
+                            let parsed = num.parse();
+                            match parsed {
+                                Ok(parsed_num) => MachineOutput::stay_out(TokenType::Number(parsed_num), ScannerState::Blank),
+                                Err(error) => MachineOutput::err(error.to_string())
+                            }
                         }
                     }
                 }
