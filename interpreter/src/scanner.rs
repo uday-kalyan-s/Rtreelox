@@ -1,5 +1,6 @@
-use std::collections::HashMap;
+use std::{collections::HashMap};
 use crate::scanner::TokenType::*;
+use std::fmt::Display;
 
 #[derive(Debug)]
 pub struct Scanner {
@@ -202,7 +203,6 @@ impl Scanner {
             }
     }
     pub fn scan_line(&mut self, line: String) -> Result<(), String> {
-        // let line = self.line.clone();
         let mut iter = line.chars().peekable();
         while let Some(&next_chr) = iter.peek() {
             let output = self.use_char(next_chr);
@@ -222,11 +222,12 @@ impl Scanner {
                 }
             }
         }
+        self.tokens.push(EOF);
         Ok(())
     }
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum TokenType {
     // single char
     LeftParan, RightParan, LeftBrace, RightBrace,
@@ -245,4 +246,18 @@ pub enum TokenType {
     If, Else, For, While, 
     Fun, Return, Class, Var, This, Super,
     True, False, And, Or, Nil,
+
+    EOF
+}
+
+impl Display for TokenType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self)
+    }
+}
+
+impl TokenType {
+    pub fn print(&self) -> String {
+        self.to_string()
+    }
 }
