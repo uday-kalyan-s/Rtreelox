@@ -4,7 +4,6 @@ use crate::scanner::Scanner;
 use std::io::stdin;
 use std::{env};
 use std::fs;
-mod test;
 mod parser;
 
 struct Interpreter {
